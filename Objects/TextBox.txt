@@ -1,0 +1,20 @@
+*** Settings ***
+
+*** Variables ***
+${textBox.Motivational Online.zipCode}    //input[contains(@name,'adminSignUpDlg-zip')]    # Enter District zipcode into this text box
+${textBox.Motivational Online.emailAdress}    //input[@name='adminSignUpDlg-email']    # Enter a valid email adress to use as your user id
+${textBox.Motivational Online.registrationPassword}    //input[@id='adminSignUpDlg-password']    # Enter password having 8 charcters with one non_alphabetic
+${textBox.Motivational Online.confirmPassword}    //input[@id='adminSignUpDlg-passwordConfirm']    # Enter confirm password
+${textBox.Motivational Online.firstName}    //input[@name='adminSignUpDlg-first']    # Enter first name of distrit admin
+${textBox.Motivational Online.lastName}    //input[@id='adminSignUpDlg-last']    # Enter last name
+${textBox.Motivational Online.registrationCode}    //input[@id='adminSignUpDlg-adminCode']    # Enter registration code
+${createAccountButton.common.districtAdminRegistration}    //button[contains(text(),'Create Account')]    # Click on Create Account Button to create a account
+${text.Motivational Online.Classcode}    //input[@id='studentSignUpDlg-classCode']    # Enter class code which is generated while creating teacher registration
+${textBox.Motivational Online..studentFirstname}    //input[@id='studentSignUpDlg-first']    # Enter student first name
+${textBox.Motivational Online.studentMiddleName}    //input[@id='studentSignUpDlg-middle']    # Enter student middle name
+${textBox.Motivational Online..studentLastName}    //input[@id='studentSignUpDlg-last']    # Enter Student Last Name
+${textBox.Motivational Online.studentLastName}    //input[@id='studentSignUpDlg-last']    # Enter student last name
+${textBox.Motivation Online.studentUserId}    //input[@id='studentSignUpDlg-uid']    # Enter student user id as unique
+${textBox.Motivational Online.studenpassword}    //input[@id='studentSignUpDlg-password']    # Enter student password
+${textBox.Motivational Online.studentConfirmPassword}    //input[@id='studentSignUpDlg-passwordConfirm']    # Enter confirm password
+${Textbox.SchoolAdmin.Zipcode}    //input[contains(@name,'adminSignUpDlg-zip')]    # School Admin Zip code

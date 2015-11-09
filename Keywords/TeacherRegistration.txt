@@ -1,0 +1,154 @@
+*** Settings ***
+Resource          ../Library/Super.txt
+Library           ../Library/CommonLibrary.py
+Resource          Zipcode.txt
+Resource          Timestamp.txt
+Resource          Registrationcode.txt
+Resource          Login.txt
+Resource          Login.txt
+Resource          Teachermodule.txt
+
+*** Keywords ***
+NextButton
+    Wait Until Element Is Visible    //button[@id='teacherSignUpDlg-next']    ${waitDelay}
+    Click Element    //button[@id='teacherSignUpDlg-next']
+
+Zipcode
+    [Arguments]    ${ZP}    ${TRSchoolName}
+    Wait Until Element Is Visible    //input[@id='teacherSignUpDlg-zip']    ${waitDelay}    Zipcode Text box \ is not visible with in 40 sec
+    Input Text    //input[@id='teacherSignUpDlg-zip']    ${ZP}
+    sleep    2sec    Hold for 2sec
+    Wait Until Element Is Visible    //label[contains(text(),'${TRSchoolName}')]    ${waitDelay}    Select school radio buuton is not visible with in 40sec
+    Click Element    //label[contains(text(),'${TRSchoolName}')]
+    sleep    2sec    Hold for 2sec
+    NextButton
+
+TecherReg-1
+    [Arguments]    ${Url}    ${BrowserName}    ${ZP}    ${TRSchoolName}    ${TeacherFirst}    ${LastName}
+    ...    ${Password}    ${ClassName}    ${SetupClass}
+    LoginPage    ${Url}    ${BrowserName}
+    Wait Until Element Is Visible    ${link.loginPage.newUser}
+    Click Element    ${link.loginPage.newUser}
+    Click Element    //td[@id='dijit_MenuItem_1_text']
+    Wait Until Element Is Visible    //input[@id='teacherSignUpDlg-registrationCode']    ${waitTime}
+    Registrationcode
+    Zipcode    ${ZP}    ${TRSchoolName}
+    Wait Until Element Is Visible    //button[@id='teacherSignUpDlg-show-terms']    ${waitTime}
+    Click Element    //button[@id='teacherSignUpDlg-show-terms']
+    Wait Until Element Is Visible    //button[contains(text(),'Agree')]    ${waitTime}
+    Click Element    //button[contains(text(),'Agree')]
+    NextButton
+    TeacherData    ${TeacherFirst}    ${LastName}
+    Wait Until Element Is Visible    //input[@id='teacherSignUpDlg-password']    ${waitTime}
+    Input Text    //input[@id='teacherSignUpDlg-password']    ${Password}
+    Input Text    //input[@id='teacherSignUpDlg-passwordConfirm']    ${Password}
+    NextButton
+    Wait Until Element Is Visible    //button[contains(text(),'Now')]    ${waitDelay}
+    ${ClassREG}    Verify Element Visible    //button[contains(text(),'${SetupClass}')]
+    Run Keyword If    "${ClassREG}"=="True"    SetUpClassDuringRegistartion
+    Run Keyword If    "${ClassREG}"!="True"    Click On Element    //button[contains(text(),'Later')]
+    Wait Until Page Contains Element    //button[@id='managementBtn']//span    ${waitDelay}
+    ${BuOK}    Verify Element Visible    //button[contains(text(),'Ok')]
+    Run Keyword If    "${BuOK}"=="True"    Click Element    //button[contains(text(),'Ok')]
+    Wait Until Page Contains Element    //button[@id='managementBtn']    ${waitDelay}
+    waituntilelementclick    //button[@id='managementBtn']
+    Wait Until Page Contains Element    //iframe[@id='iframeSchoolAdmin']    ${waitDelay}
+    Select Frame    //iframe[@id='iframeSchoolAdmin']
+    Wait Until Element Is Visible    //td[contains(text(),'${TeacherFirst} ')]    ${waitDelay}
+    Comment    waituntilelementclick    //td[contains(text(),'${TeacherFirst} ')]
+    Comment    waituntilelementclick    //div[@id='editGroupBtn']
+    ${Registrationstatus}    Run Keyword And Return Status    Wait Until Element Is Visible    //td[contains(text(),'${TeacherFirst} ')]    30s
+    [Return]    ${Registrationstatus}
+
+TeacherData
+    [Arguments]    ${TeacherFirst}    ${LastName}
+    Wait Until Element Is Visible    //input[@id='teacherSignUpDlg-first']    ${waitTime}
+    Input Text    //input[@id='teacherSignUpDlg-first']    ${TeacherFirst}
+    Input Text    //input[@id='teacherSignUpDlg-last']    ${LastName}
+    Wait Until Element Is Visible    //input[@id='teacherSignUpDlg-email']    ${waitTime}
+    ${TimpeStamp}    Generation Of Unique Id    TA
+    sleep    2s
+    Input Text    //input[@id='teacherSignUpDlg-email']    ${TimpeStamp}
+    Input Text    //input[@id='teacherSignUpDlg-emailConfirm']    ${TimpeStamp}
+    NextButton
+
+SetUpClassDuringRegistartion
+    Wait Until Element Is Visible    //button[contains(text(),'Now')]    ${waitDelay}
+    Click Element    //button[contains(text(),'Now')]
+    Wait Until Element Is Visible    //input[@title='Class Name']    ${waitDelay}
+    ${ClassName}    generation_of_unique_Char    Class
+    Input Text    //input[@title='Class Name']    ${ClassName}
+    ${getTitle}    Get Matching Xpath Count    //select[@id='teacherSignUpDlg-classTitles']//option
+    : FOR    ${ListIteams}    IN RANGE    1    ${getTitle}
+    \    Click On Element    //select[@id='teacherSignUpDlg-classTitles']//option['${ListIteams}']
+    NextButton
+    Wait Until Element Is Visible    //button[@id='mysPromptBtnYes']    ${waitDelay}
+    Click Element    //button[@id='mysPromptBtnYes']
+    Wait Until Element Is Visible    //button[2][contains(text(),'No')]
+    Click Element    //button[2][contains(text(),'No')]
+    Wait Until Element Is Visible    //button[contains(text(),'Finished')]    ${waitDelay}
+    Click Element    //button[contains(text(),'Finished')]
+
+Addstudent in class
+    [Arguments]    ${StudentFristname}    ${StudentLastName}    ${studentPass}    ${Grade}    ${StudentNo}
+    Wait Until Element Is Visible    //div[@id='newUserBtn']
+    : FOR    ${addstudent}    IN RANGE    0    ${StudentNo}
+    \    waituntilelementclick    //div[@id='newUserBtn']
+    \    Wait Until Element Is Visible    //input[@id='newUserFirstName']    ${waitDelay}
+    \    ${b}    Generate Random String    2    [LOWER]
+    \    ${c}    Catenate    ${StudentFristname}    ${b}
+    \    Input Text    //input[@id='newUserFirstName']    ${c}
+    \    Input Text    //input[@id='newUserLastName']    ${StudentLastName}
+    \    Wait Until Page Contains Element    //table[@id='newUserGrade']//tbody//td[2]    ${waitDelay}
+    \    waituntilelementclick    //table[@id='newUserGrade']//tbody//td[2]
+    \    Wait Until Element Is Visible    //tbody[@class='dijitReset']//td[contains(text(),'${Grade}')]    ${waitDelay}
+    \    Click Element    //tbody[@class='dijitReset']//td[contains(text(),'${Grade}')]
+    \    ${a}    Generate Random String    12    [LOWER]
+    \    Input Text    //div[@widgetid='newUserUserId']//div[2]//input[1]    ${a}
+    \    Input Text    //div[@widgetid='newUserPassword']//div[2]//input[1]    ${studentPass}
+    \    Click Element    //span[@id='newUserOK_label']
+    \    Wait Until Element Is Visible    //div[@id='newUserBtn']    ${waitDelay}
+    ${AddStudent}    Run Keyword And Return Status    Wait Until Element Is Visible    //span[@id='newUserOK_label']
+    [Return]    ${AddStudent}
+
+AddStudent-2
+    [Arguments]    ${TeacherLogin}    ${TchPass}    ${Ts}    ${ClassDescription}    ${Columnanme}    ${row}
+    ...    ${list}
+    ${TeacherLoginstatus}    LoginMaster    ${TeacherLogin}    ${TchPass}
+    Run Keyword Unless    ${TeacherLoginstatus}    Fail    Teacher Login is not failed
+    classDesp    ${Ts}    ${ClassDescription}
+    Wait Until Element Is Visible    //div[@id='editNewGroupUsersBtn']    30s
+    Click Element    //div[@id='editNewGroupUsersBtn']
+    ${tablecolval}    TableData_in_list    ${Columnanme}    ${row}    //div[@data-dojo-attach-point="fromNode"]    ${list}
+    Run Keyword Unless    ${tablecolval}    Fail    Student not added
+
+TableData_in_list
+    [Arguments]    ${Columnanme}    ${row}    ${tablelocator}    ${list}
+    Wait Until Element Is Visible    //div[@id='editNewGroupUsersBtn']    30s
+    Comment    Click Element    //div[@id='editNewGroupUsersBtn']
+    Wait Until Element Is Enabled    //div[@data-dojo-attach-point="fromNode"]//div//table[@id='dgrid_0-header']    60s
+    table_get_column_no    //div[@data-dojo-attach-point="fromNode"]    ${Columnanme}
+    ${tablecolval}    get_columnvalues    ${tablelocator}    ${Columnanme}    ${row}
+    Comment    ${listvalues}    Get Length Of List    ${tablecolval}
+    : FOR    ${GetData}    IN    @{tablecolval}
+    \    Wait Until Element Is Visible    //div[@data-dojo-attach-point="fromNode"]//div[@class='dgrid-scroller']//div[@role='row']//td[contains(text(),'${GetData}')]
+    \    Click On Element    //div[@data-dojo-attach-point="fromNode"]//div[@class='dgrid-scroller']//div[@role='row']//td[contains(text(),'${GetData}')]
+    \    ${toTableUserID}    Get Text    //span[contains(text(),'New Class Members')]//following::div[1]//table//td[4][contains(text(),'${GetData}')]
+    \    Should Be Equal    ${GetData}    ${toTableUserID}
+    \    Comment    \    \    //span[contains(text(),'New Class Members')]//following::div[1]//table//td[4]
+    Click On Element    //span[@id='listEditorDlg_title']/following::div/div[@id='dijit_layout_ContentPane_14']/div//span[@id='saveListEditor_label']
+    Wait Until Keyword Succeeds    3m    2s    Click Element    //div[@id='editNewGroupSyllabusBtn']
+    Comment    Click On Element    //div[@id="editNewGroupSyllabusBtn"]
+    Wait Until Element Is Visible    //span[contains(text(),'Subscription Titles')]    ${waitDelay}
+    :FOR    ${GetData1}    IN    @{list}
+    \    Wait Until Element Is Visible    //td[text()='${GetData1}']
+    \    waituntilelementclick    //td[text()='${GetData1}']
+    \    ${Tittle}    Get Text    //span[contains(text(),'New Class Syllabus')]//following::div[1]//table//td[contains(text(),'${GetData1}')]
+    \    Should Be Equal    ${GetData1}    ${Tittle}
+    Click On Element    //span[@id='listEditorDlg_title']/following::div/div[@id='dijit_layout_ContentPane_14']/div//span[@id='saveListEditor_label']
+    Wait Until Element Is Visible    //button[contains(text(),'Proceed')]
+    Click On Element    //button[contains(text(),'Proceed')]
+    Wait Until Element Is Visible    //span[contains(text(),'OK')]
+    Click On Element    //span[contains(text(),'OK')]
+    ${getlist}    Run Keyword And Return Status    Wait Until Element Is Visible    //div[@id='newGroupBtn']
+    [Return]    ${tablecolval}    ${getlist}

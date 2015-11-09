@@ -1,0 +1,190 @@
+*** Settings ***
+Resource          ../Library/Super.txt
+
+*** Test Cases ***
+Registration_01
+    [Documentation]    1.Login in to appication.
+    ...    2.Verify Login status
+    ...    3.School Admin Registration
+    ...    4.Verify School Admin Registration status
+    ...    5.Login in to appication.
+    ...    6.Verify Login status
+    ...    7.Distric Admin Registration
+    ...    8.Verify Distric Admin Registration status
+    ...    9.Login in to appication.
+    ...    10.Verify Login status
+    ...    11.Teacher Registration
+    ...    12.Verify Teacher Registration status
+    ...    13.Login in to appication.
+    ...    14.Verify Login status
+    ...    15.Student Registration
+    ...    16.verify student Registration status
+    ${Loginstatus}    LoginPage    ${url.MMproject}    gc
+    Run Keyword Unless    ${Loginstatus}    Fail    Login page is not found
+    ${SchoolAdmin}    SchoolAdmin    76008    test@123    test@123    UserFristName    UserLastName
+    Run Keyword Unless    ${SchoolAdmin}    Fail    SchoolAdmin Registation is Failed
+    ${Loginstatus}    LoginPage    ${url.MMproject}    ${Browser}
+    Run Keyword Unless    ${Loginstatus}    Fail    Login page is not found
+    ${DistricAdmin}    DistricAdmin    76008    test@123    test@123    UserFristName    UserLastName
+    Run Keyword Unless    ${DistricAdmin}    Fail    Distric dmin Registration is failed
+    ${Loginstatus}    LoginPage    ${url.MMproject}    ${Browser}
+    Run Keyword Unless    ${Loginstatus}    Fail    Login page is not found
+    ${TeacherReg}    TeacherRegistration
+    Run Keyword Unless    ${TeacherReg}    Fail    Teacher Registation Failed
+    ${Loginstatus}    LoginPage    ${url.MMproject}    ${Browser}
+    Run Keyword Unless    ${Loginstatus}    Fail    Login page is not found
+    ${Studentlogin}    SudentRegistration    5PS    StudentFrist    StudentLast    StM    CLs01
+    ...    test@123    test@123
+    Run Keyword Unless    ${Studentlogin}    Fail    Student Registation is failed
+    [Teardown]    CloseDriver
+
+Assignment_01
+    [Documentation]    1.Login in to Application as Teacher
+    ...    2.verify the status of Login
+    ...    3.Create Assignment list
+    ...    4.Add Assignment by using list or labels
+    ...    5.Verify the Assignment status
+    ${Loginstatus}    LoginMaster    rhwpte+TA8093427@gmail.com    test@123
+    Run Keyword Unless    ${Loginstatus}    Fail    Teacher \ login in to appication Fail
+    ${Assignmentlist}    Create List    Partner Practice    Independent Practice \
+    ${AddAss}    AddAssignment    cls01    CCSMotivationMath    4    Unit 2 - Solve Word Problems: Multiplication and Division as Comparisons    ${Assignmentlist}
+    ...    Show Classes
+    Run Keyword Unless    ${AddAss}    Fail    Assignment is not added
+    [Teardown]    CloseDriver
+
+SampleTestCase
+    ${data}    test    https://mysatori.cloudant.com/codes_dev/_design/te_keys/_list/by-id/codes?startkey=[%22te_serial_num%22,1443209025734]&endkey=[%22te_serial_num%22,1443209025734]&limit=300
+    ${list}    Split To Lines    ${data}
+    ${cr}    Set Variable    @{list}[1]
+    log    ${cr}
+    [Teardown]    CloseDriver
+
+TeacherModule(list)
+    [Documentation]    1.Login in to appliaction with valid Teacher credencials
+    ...    2.Verify the Status of Teacher login
+    ...    3.Create class
+    ...    4.verify the created class
+    ...    5.Create Student list
+    ...    6.Create Tittles list
+    ...    7.Add students in class by using created lists
+    ...    8.Verify the status of the add students in class
+    ...    9.Add student by using add button
+    ...    10.Verify the add student
+    ...    11.close browser
+    ${TeacherLoginstatus}    LoginMaster    rhwpte+TA8093427@gmail.com    test@123
+    Run Keyword Unless    ${TeacherLoginstatus}    Fail    Teacher Login is not failed
+    ${Createclass}    CreateClass    Class    This is class one
+    Run Keyword Unless    ${Createclass}    Fail    Class is not created
+    ${list}    Create List    studenta    studentb    students    studentsd
+    ${list2}    Create List    CCS Math Assessments Level 5    CCS Math Assessments Level 3    CCS Reading Assessments Level 5    CCS Reading Assessments Level 4
+    ${EditStatus}    EditStudents and Tittle    ${list}    class    Welcome    rhwpte+TA8093427@gmail.com    test@123
+    ...    ${list2}
+    Run Keyword Unless    ${EditStatus}    Fail    Edit student ,Tittle are failed
+    ${AddStudent}    AddStudent    4    rhwpte+TA1041923@gmail.com
+    Run Keyword Unless    ${AddStudent}    Fail    Add student Faill
+    Close Browser
+    [Teardown]    CloseDriver
+
+DistricAdminModule_01
+    ${DistricAdminlogin}    LoginMaster    rhwpte+da1041827@gmail.com    test@123
+    Run Keyword Unless    ${DistricAdminlogin}    Fail    Distric Admin Login is not failed
+    ${Createclass}    CreateClass    Class    This is class one
+    Run Keyword Unless    ${Createclass}    Fail    Class is not created
+    ${AddStudent}    AddStudent    4    rhwpte+da1041827@gmail.com
+    Run Keyword Unless    ${AddStudent}    Fail    Add student Faill
+    ${list}    Create List    Tester860    Tester861    Tester862    Tester863
+    ${list2}    Create List    CCS Math Assessments Level 5    CCS Math Assessments Level 3    CCS Reading Assessments Level 5    CCS Reading Assessments Level 4
+    ${EditStatus}    EditStudents and Tittle    ${list}    class    Welcome    rhwpte+da1041827@gmail.com    test@123
+    ...    ${list2}
+    Run Keyword Unless    ${EditStatus}    Fail    Edit student ,Tittle are failed
+    [Teardown]    CloseDriver
+
+SampleTestcase1
+    ${TeacherLoginstatus}    LoginMaster    rhwpte+TA8093427@gmail.com    test@123
+    Run Keyword Unless    ${TeacherLoginstatus}    Fail    Teacher \ login in to appication Fail
+    waituntilelementclick    //div[@id='assmtsBtnContainer']//button
+    Wait Until Page Contains Element    //div[@id='assignmentsOptionsView']//button[@id='newAssignmentsBtn']    60s
+    Wait Until Keyword Succeeds    2m    2s    Click On Element    //div[@id='assignmentsOptionsView']//button[@id='newAssignmentsBtn']
+    Wait Until Page Contains Element    //ul[@id='raClassList']//li[2]//input    60s
+    Wait Until Keyword Succeeds    2m    2s    Click On Element    //ul[@id='raClassList']//li[3]//input
+    Wait Until Element Is Visible    //ul[@id='raSubjects']//li    60s
+    sleep    10s
+    Wait Until Keyword Succeeds    2m    2s    Click On Element    //li[contains(@style,'${sampl1}.png')]
+    sleep    10s
+    Wait Until Keyword Succeeds    2m    2s    Click On Element    //li[contains(@style,'Level_${L}.png')]
+    Wait Until Element Is Enabled    //td[contains(text(),'02 Form B')]//preceding-sibling::td
+    Click On Element    //td[contains(text(),'01 Form A')]//preceding-sibling::td
+    Click On Element    //td[contains(text(),'02 Form B')]//preceding-sibling::td
+    Click On Element    //label//input[@id='handoutAssmtsBook']
+    Click On Element    //button[@id='handoutAssmtsBtn']//span[contains(text(),'Assign Now')]
+    [Teardown]    CloseDriver
+
+WriteAssignmentByStudent
+    ${Loginstatus}    LoginMaster    studentabc    test@123
+    Run Keyword Unless    ${Loginstatus}    Fail    Login page is not found
+    Comment    Writeassignment
+    assgsample    Sample Data
+    [Teardown]    CloseDriver
+
+GradeAssignment
+    ${Loginstatus}    LoginMaster    rhwpte+TA8093427@gmail.com    test@123
+    Run Keyword Unless    ${Loginstatus}    Fail    Teacher \ login in to appication Fail
+    waituntilelementclick    //div[@id='newAssignmentsGrade']/img
+    [Teardown]    CloseDriver
+
+AssignmentSC-1
+    ${Loginstatus}    LoginMaster    rhwpte+tc@gmail.com    test@123
+    Run Keyword Unless    ${Loginstatus}    Fail    Teacher \ login in to appication Fail
+    ${Assignmentlist}    Create List    Partner Practice    Independent Practice    Critical Thinking: Application    Critical Thinking: Synthesis    Motivation Station Game
+    ${AddAss}    AddAssignment    class1    CCSMotivationMath    1    Unit 1 - Solve Word Problems: Addition and Subtraction    Show Classes
+    ...    ${Assignmentlist}
+    Run Keyword Unless    ${AddAss}    Fail    Assignment is not Assign to student
+    ${Loginstatus}    LoginMaster    student1    test@123
+    Run Keyword Unless    ${Loginstatus}    Fail    Student Login is susessfull
+    Write Ass1    Critical Thinking: Synthesis:    Solve Word Problems: Addition and Subtraction
+    [Teardown]    CloseDriver
+
+TC_SC_01
+    ${Registrationstatus}    TecherReg-1    ${url.MMproject}    gc    76008    Aledo Middle School    Teacher FirstName
+    ...    LastName    test@123    ClassA1    Now
+    Run Keyword Unless    ${Registrationstatus}    Fail    Teacher Registation \ Fail
+    ${AddStudent}    Addstudent in class    StudentFrist    Last    test@123    1    4
+    Run Keyword Unless    ${AddStudent}    Fail    Student not added
+    [Teardown]    CloseDriver
+
+TC_SC_02
+    ${list}    Create List    CCS Math Assessments Level 5    CCS Math Assessments Level 3    CCS Reading Assessments Level 5    CCS Reading Assessments Level 4
+    AddStudent-2    rhwpte+TA8093427@gmail.com    test@123    Class    This is class one    User Id    3
+    ...    ${list}
+    [Teardown]    CloseDriver
+
+FileUpload
+    LoginMaster    rhwpte+sa8051647@gmail.com    test@123
+    Wait Until Element Is Visible    //button[@id='importUsersBigBtnBtn']    ${waitDelay}
+    ${click}    waituntilelementclick    //button[@id='importUsersBigBtnBtn']
+    Wait Until Element Is Visible    //button[@id='adminImportBtn']    ${waitDelay}
+    ${import}    Verify Element Visible    //button[@id='adminImportBtn']
+    ${click}    waituntilelementclick    //button[@id='adminImportBtn']
+    ${DicData}    create_csv_file_using_ms_excel_file_uniqe    D:\\MM5\\MM\\output.csv    D:\\MM5\\MM\\hari.xls    2    Sheet1
+    sleep    2s
+    AutoItLibrary.Send    {ALT n}
+    AutoItLibrary.Send    \\C:\\Users\\sriharibabu.t\\Desktop\\output.csv
+    AutoItLibrary.Send    {ENTER}
+    [Teardown]    CloseDriver
+
+Sample
+    createxmlfile    D:\MM\\hari.xlsx    Hari
+    copyxmldata    D:\MM\\hari.xls    C:\\Users\\sriharibabu.t\\Desktop\\output.xls
+    ${data}    create_csv_file_using_ms_excel_file    C:\\Users\\sriharibabu.t\\Desktop\\output.csv    C:\\Users\\sriharibabu.t\\Desktop\\hari.xls    Sheet1
+    ${list}    get_row_values_into_list    C:\\Users\\sriharibabu.t\\Desktop\\output.csv    2
+    ${value1}    Create Dictionary    1    wel    2    Hello
+    ${DicData}    create_csv_file_using_ms_excel_file_uniqe    C:\\Users\\sriharibabu.t\\Desktop\\output.csv    C:\\Users\\sriharibabu.t\\Desktop\\hari.xls    2    Sheet1
+    ${StudentID}    Get From Dictionary    ${DicData}    User ID
+    ${StudentPassword}    Get From Dictionary    ${DicData}    Password
+    ${FirstName}    Get From Dictionary    ${DicData}    First Name
+    ${MiddleNmae}    Get From Dictionary    ${DicData}    Middle Name
+    ${LastName}    Get From Dictionary    ${DicData}    Last Name
+    ${GradeLevel}    Get From Dictionary    ${DicData}    Grade Level
+    ${Role}    Get From Dictionary    ${DicData}    Role
+    ${SchoolName}    Get From Dictionary    ${DicData}    School
+    ${FileData}    csvfile    C:\\Users\\sriharibabu.t\\Desktop\\output.csv

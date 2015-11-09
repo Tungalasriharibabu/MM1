@@ -1,0 +1,9 @@
+*** Settings ***
+Library           AutoItLibrary
+Resource          ../Objects/CommonProperties.txt
+Resource          ../Library/Super.txt
+
+*** Keywords ***
+CloseDriver
+    Comment    Close All Browsers
+    Run Keyword If    '${Browser}'=='gc'    AutoItLibrary.Process Close    chromedriver.exe

@@ -1,0 +1,9 @@
+*** Settings ***
+Library           ../Library/CommonLibrary.py
+Resource          ../Library/Super.txt
+
+*** Keywords ***
+TS
+    [Arguments]    ${Ts}    # TimeStampKeyword
+    ${TimpeStamp}    Generation Of Unique Id    ${Ts}
+    Input Text    ${textBox.Motivational Online.emailAdress}    ${TimpeStamp}

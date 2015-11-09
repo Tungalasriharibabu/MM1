@@ -1,0 +1,14 @@
+*** Settings ***
+Resource          ../Library/Super.txt
+
+*** Keywords ***
+zipcodepage
+    [Arguments]    ${ZP}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.zipCode}    40    Zipcode Text box \ is not visible with in 40 sec
+    Input Text    ${textBox.Motivational Online.zipCode}    ${ZP}
+    sleep    2sec    Hold for 2sec
+    Wait Until Element Is Visible    ${radioButton.Motivational Online.schoolName}    40    Select school radio buuton is not visible with in 40sec
+    Click Element    ${radioButton.Motivational Online.schoolName}
+    sleep    2sec    Hold for 2sec
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    40    Next buton in zipcode \ is not visible with in 40sec
+    Click Element    ${button.Motivational Online .Next}

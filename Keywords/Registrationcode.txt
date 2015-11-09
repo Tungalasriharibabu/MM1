@@ -1,0 +1,25 @@
+*** Settings ***
+Resource          ../Library/Super.txt
+Library           C:/Users/sriharibabu.t/Desktop/pythonpartice/Text2d.py
+
+*** Keywords ***
+Registrationcode
+    ${data}    test    https://mysatori.cloudant.com/codes_dev/_design/te_keys/_list/by-id/codes?startkey=[%22te_serial_num%22,1443209025734]&endkey=[%22te_serial_num%22,1443209025734]&limit=300
+    ${list}    Split To Lines    ${data}
+    ${cr}    Set Variable    @{list}[1]
+    Wait Until Element Is Visible    //input[@name='teacherSignUpDlg-registrationCode']
+    Input Text    //input[@name='teacherSignUpDlg-registrationCode']    ${cr}
+    Wait Until Element Is Visible    //button[@id='teacherSignUpDlg-next']
+    Click Element    //button[@id='teacherSignUpDlg-next']
+
+Dropdown
+    [Arguments]    ${locator}    ${timeForElementVisibility}    ${value}=${EMPTY}
+    Run Keyword If     '${value}'!='${EMPTY}'     Select From List By Label    ${locator} \ \ \     ${value}
+     Return From Keyword If \      '${value}'!='${EMPTY}    Select From List By Label    ${locator} \ \ \     ${value}
+    ${locatorStatus}    Wait For Element Visible \     ${locator} \ \ \     ${timeForElementVisibility}
+    Run Keyword Unless     ${locatorStatus}    Fail      ${locator} dropdown not displayed.
+    ${count}     Get Matching Xpath Count \     ${locator}/option
+    ${range}     Get Random Number In Given Range     2    ${count}
+    ${value}    Get Text     ${locator}/option[${range}]
+    Select From List By Label    ${locator}    ${value}
+    [Return]    ${value}

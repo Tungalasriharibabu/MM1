@@ -1,0 +1,2 @@
+*** Variables ***
+${checkbox.Motivational Online.adminSignUpDlg-subscribe}    //input[contains(@id,'adminSignUpDlg-subscribe')]    # Enable the check box to acess the signup

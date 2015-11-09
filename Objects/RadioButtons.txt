@@ -1,0 +1,3 @@
+*** Variables ***
+${radioButton.selectSchoolName.xpath}    //input[@id='adminSignUpDlg-selectSchool-MsvruHel37SBAcG5bUACjfAN1M5h8aEm']    # Select school name by clicking on radio button
+${radioButton.Motivational Online.schoolName}    //input[@name='school']    # Click on Radio Button to select school name

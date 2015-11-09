@@ -1,0 +1,11 @@
+*** Variables ***
+${url.MMproject}    http://b33test2a.mentoringmindsonline.com/mysdb_m3_test/_design/mys/mmloginw.html    # Enter the url to open the application
+${Browser}        gc
+${Lower}          qwertyuiopasdfghjklzxcvbnm
+${sampl1}         Math_Assessments
+${L}              3
+${waitTime}       30
+${waitDelay}      120
+${Nextbutton}     //li[@id='navBtnNext']
+${Submitbuttoninass}    //li[@id='navBtnTurnIn']
+${Sign Out}       //div[@id='welcomeView']//div//span[contains(@id,'ToolBarButton')]//td[contains(text(),'Sign Out')]

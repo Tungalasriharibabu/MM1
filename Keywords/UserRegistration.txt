@@ -1,0 +1,208 @@
+*** Settings ***
+Resource          ../Library/Super.txt
+Library           ../Library/CommonLibrary.py
+Resource          Zipcode.txt
+Resource          Timestamp.txt
+Resource          Registrationcode.txt
+
+*** Keywords ***
+SchoolAdmin
+    [Arguments]    ${Zipcode}    ${password}    ${confirmpassword}    ${FristName}    ${Lastname}
+    Wait Until Element Is Visible    ${link.loginPage.newUser}
+    Click Element    ${link.loginPage.newUser}
+    Wait Until Element Is Visible    ${label.loginPage.menuItem2}    40    School Admin label \ is not visible with in 20 sec
+    Click Element    ${label.loginPage.menuItem2}
+    zipcodepage    ${Zipcode}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.emailAdress}    40    Email Address Tex box is not visible with in 40 sec
+    Timestamp.TS    sa
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    40s    Next Button in Email Addres is not visible with in 20 sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.registrationPassword}    20s    Password Text box \ not visible with in 20 sec
+    Input Text    ${textBox.Motivational Online.registrationPassword}    ${password}
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    NextButton in password is not visible with in 20 sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.confirmPassword}    20    Confirm Password text box is not visible with in 20 sec
+    Input Text    ${textBox.Motivational Online.confirmPassword}    ${confirmpassword}
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    Next buuton in confirm password is not visible with in 20 sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.firstName}    50    Frist Name Text box is not visible with in 20 sec
+    Input Text    ${textBox.Motivational Online.firstName}    ${FristName}
+    Input Text    ${textBox.Motivational Online.lastName}    ${Lastname}
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    50    Next Button in name felid is not visible with in 20 sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${dropDown.Motivational Online.jobTitle}    20    Element is not visible with in 20 sec
+    Click Element    ${dropDown.Motivational Online.jobTitle}
+    Sleep    3s    Element should be hold in 2sec
+    Wait Until Element Is Visible    ${label.Motivational Online.jobTitle}    20    JobTittle list box is not visible with in 20 sec
+    Click Element    ${label.Motivational Online.jobTitle}
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    Next Button in job tittle is not visible with in 20 sec
+    Sleep    3s    Hold the element in 3sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.registrationCode}    20    School Admin Registration text box is not visible with in 20 sec
+    Sleep    2s
+    Input Text    ${textBox.Motivational Online.registrationCode}    sadmin-999999
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    Next button in Regcode \ is not visible with in 20 sec
+    Sleep    3s    Hold the element in 3sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${button.Motivational Online.Terms And Conditions}    20    Terms and condtion button \ is not visible with in 40sec
+    Click Element    ${button.Motivational Online.Terms And Conditions}
+    Wait Until Element Is Visible    ${button.Motivational Online.I Agree}    20    Next button in terms and condtions \ is not visible with in 20sec
+    Click Element    ${button.Motivational Online.I Agree}
+    Wait Until Element Is Visible    ${checkbox.Motivational Online.adminSignUpDlg-subscribe}    20    Signup button is not visible with in 20sec
+    Click Element    ${checkbox.Motivational Online.adminSignUpDlg-subscribe}
+    Wait Until Element Is Visible    ${button.Motivational Online.Create Account}    40    Create Accout button \ is not visible with in 40sec
+    Click Element    ${button.Motivational Online.Create Account}
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    Next button in create accout \ is not visible with in 20sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    //span[contains(text(),'Management')]    60s
+    ${SchoolAdmin}    Run Keyword And Return Status    Wait Until Element Is Visible    //span[contains(text(),'Management')]    30s
+    Close Browser
+    [Return]    ${SchoolAdmin}
+
+DistricAdmin
+    [Arguments]    ${Zipcode}    ${password}    ${confirmpassword}    ${FristName}    ${Lastname}
+    Wait Until Element Is Visible    ${link.loginPage.newUser}    20s
+    Click Element    ${link.loginPage.newUser}
+    Wait Until Element Is Visible    ${label.loginPage.menuItem3}    20    Disticl Admin label \ is not visible with in 20 sec
+    Click Element    ${label.loginPage.menuItem3}
+    zipcodepage    ${Zipcode}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.emailAdress}    40    Email Address Tex box is not visible with in 40 sec
+    Timestamp.TS    da
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    Next Button in Email Addres is not visible with in 20 sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.registrationPassword}    20    Password Text box \ not visible with in 20 sec
+    Input Text    ${textBox.Motivational Online.registrationPassword}    ${password}
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.confirmPassword}    20    NextButton in password is not visible with in 20 sec
+    Input Text    ${textBox.Motivational Online.confirmPassword}    ${confirmpassword}
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    Confirm Password text box is not visible with in 20 sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.firstName}    20    Frist Name Text box is not visible with in 20 sec
+    Input Text    ${textBox.Motivational Online.firstName}    ${FristName}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.lastName}    20    LastName Text box is not visible with in 20 sec
+    Input Text    ${textBox.Motivational Online.lastName}    ${Lastname}
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    Next Button in name felid is not visible with in 20 sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${dropDown.Motivational Online.jobTitle}    20    JobTittle list box is not visible with in 20 sec
+    Click Element    ${dropDown.Motivational Online.jobTitle}
+    Sleep    3s    Hold for 3sec
+    Wait Until Element Is Visible    ${label.Motivational Online.jobTitle}    20    JobTittle list box is not visible with in 20 sec
+    Click Element    ${label.Motivational Online.jobTitle}
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    Next Button in job tittle is not visible with in 20 sec
+    Sleep    5s    Hold for 5sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.registrationCode}    20    Distric Admin Registration text box is not visible with in 20 sec
+    Input Text    ${textBox.Motivational Online.registrationCode}    dadmin-999999
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    Next button in Regcode \ is not visible with in 20 sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    ${button.Motivational Online.Terms And Conditions}    20    Terms and condtion button \ is not visible with in 20sec
+    Click Element    ${button.Motivational Online.Terms And Conditions}
+    Wait Until Element Is Visible    ${button.Motivational Online.I Agree}    20    Next button in terms and condtions \ is not visible with in 20sec
+    Click Element    ${button.Motivational Online.I Agree}
+    Wait Until Element Is Visible    ${checkbox.Motivational Online.adminSignUpDlg-subscribe}    20    check box in admin signup is not visible with in 20sec
+    Click Element    ${checkbox.Motivational Online.adminSignUpDlg-subscribe}
+    Wait Until Element Is Visible    ${button.Motivational Online.Create Account}    20    Create Accout button \ is not visible with in 40sec
+    Click Element    ${createAccountButton.common.districtAdminRegistration}
+    Wait Until Element Is Visible    ${button.Motivational Online .Next}    20    Next button in create accout \ is not visible with in 20sec
+    Click Element    ${button.Motivational Online .Next}
+    Wait Until Element Is Visible    //span[contains(text(),'Management')]    60s
+    ${DistricAdmin}    Run Keyword And Return Status    Wait Until Element Is Visible    //span[contains(text(),'Management')]    30s
+    Close Browser
+    [Return]    ${DistricAdmin}
+
+SudentRegistration
+    [Arguments]    ${classcode}    ${StudentFristname}    ${Studetnmiddlename}    ${StudentLastName}    ${StudentId}    ${password}
+    ...    ${confrimPassword}
+    Wait Until Element Is Visible    ${link.loginPage.newUser}
+    Click Element    ${link.loginPage.newUser}
+    Wait Until Element Is Visible    ${label.loginPage.menuItem1}    20    Student \ label \ is not visible with in 20 sec
+    Click Element    ${label.loginPage.menuItem1}
+    Wait Until Element Is Visible    ${text.Motivational Online.Classcode}    20    Classcode text box is not visible after 20 sec
+    Input Text    ${text.Motivational Online.Classcode}    ${classcode}
+    Sleep    2s
+    Wait Until Element Is Visible    ${button.Motivational Online.SchoolSignUpNext}    20    Sigup buuton is not vissible aftre 20 sec
+    Click Element    ${button.Motivational Online.SchoolSignUpNext}
+    Wait Until Element Is Visible    ${textBox.Motivational Online..studentFirstname}    20    Frist Name Text box is not visible After 20 sec
+    Input Text    ${textBox.Motivational Online..studentFirstname}    ${StudentFristname}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.studentMiddleName}    20    Middle Name Text box is not vissible After 20 sec
+    Input Text    ${textBox.Motivational Online.studentMiddleName}    ${Studetnmiddlename}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.studentLastName}    20    Lastname Text box is not visible after 20 sec
+    Input Text    ${textBox.Motivational Online.studentLastName}    ${StudentLastName}
+    Wait Until Element Is Visible    ${textBox.Motivation Online.studentUserId}    20    Class code Text box is not visible after 20 sec
+    Input Text    ${textBox.Motivation Online.studentUserId}    ${StudentId}
+    Wait Until Element Is Visible    ${dropDown.Motivational Online.gradeLevel}    20    Grade level List box is not avabile after 20 sec
+    Click Element    ${dropDown.Motivational Online.gradeLevel}
+    Wait Until Element Is Visible    ${label.Motivational Online.studentGrade}    20    Grade Text box is not visible after 20 sec
+    Click Element    ${label.Motivational Online.studentGrade}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.studenpassword}    20    Student password text box is not visible after 20 sec
+    Input Text    ${textBox.Motivational Online.studenpassword}    ${password}
+    Wait Until Element Is Visible    ${textBox.Motivational Online.studentConfirmPassword}    20    Confirm password text box is not visible after 20 sec
+    Input Text    ${textBox.Motivational Online.studentConfirmPassword}    ${confrimPassword}
+    Wait Until Element Is Visible    ${button.Motivational Online.SchoolSignUpNext}    40    Next button is not avabile after 40 sec
+    Click Element    ${button.Motivational Online.SchoolSignUpNext}
+    Wait Until Element Is Visible    ${button.Motivational Online.SchoolSignUpNext}    40    Sign up button is not avaible after 40 sec
+    Click Element    ${button.Motivational Online.SchoolSignUpNext}
+    ${Studentlogin}    Run Keyword And Return Status    Wait Until Element Is Visible    ${button.Motivational Online.SchoolSignUpNext}    30s
+    Close Browser
+    [Return]    ${Studentlogin}
+
+TeacherRegistration
+    Wait Until Element Is Visible    ${link.loginPage.newUser}
+    Click Element    ${link.loginPage.newUser}
+    Click Element    //td[@id='dijit_MenuItem_1_text']
+    Wait Until Element Is Visible    //input[@id='teacherSignUpDlg-registrationCode']    ${waitTime}
+    Registrationcode
+    Wait Until Element Is Visible    //input[@id='teacherSignUpDlg-zip']    ${waitTime}
+    Input Text    //input[@id='teacherSignUpDlg-zip']    76008
+    Wait Until Element Is Visible    ${radioButton.Motivational Online.schoolName}    ${waitTime}
+    Click Element    //label[text()='Aledo Learning Center']
+    sleep    2sec    ${waitTime}
+    Wait Until Element Is Visible    //button[@id='teacherSignUpDlg-next']    ${waitTime}
+    Click Element    //button[@id='teacherSignUpDlg-next']
+    Wait Until Element Is Visible    //button[@id='teacherSignUpDlg-show-terms']    ${waitTime}
+    Click Element    //button[@id='teacherSignUpDlg-show-terms']
+    Wait Until Element Is Visible    //button[contains(text(),'Agree')]    ${waitTime}
+    Click Element    //button[contains(text(),'Agree')]
+    Wait Until Element Is Visible    //button[@id='teacherSignUpDlg-next']    ${waitTime}
+    Click Element    //button[@id='teacherSignUpDlg-next']
+    Wait Until Element Is Visible    //input[@id='teacherSignUpDlg-first']    ${waitTime}
+    Input Text    //input[@id='teacherSignUpDlg-first']    TeacherFirst
+    Input Text    //input[@id='teacherSignUpDlg-last']    Last
+    ${TimpeStamp}    Generation Of Unique Id    TA
+    sleep    2s
+    Wait Until Element Is Visible    //input[@id='teacherSignUpDlg-email']    ${waitTime}
+    Input Text    //input[@id='teacherSignUpDlg-email']    ${TimpeStamp}
+    Input Text    //input[@id='teacherSignUpDlg-emailConfirm']    ${TimpeStamp}
+    Wait Until Element Is Visible    //button[@id='teacherSignUpDlg-next']    ${waitTime}
+    Click Element    //button[@id='teacherSignUpDlg-next']
+    Wait Until Element Is Visible    //input[@id='teacherSignUpDlg-password']    ${waitTime}
+    Input Text    //input[@id='teacherSignUpDlg-password']    test@123
+    Input Text    //input[@id='teacherSignUpDlg-passwordConfirm']    test@123
+    Wait Until Element Is Visible    //button[@id='teacherSignUpDlg-next']    ${waitDelay}
+    Click Element    //button[@id='teacherSignUpDlg-next']
+    Comment    Wait Until Element Is Visible    //button[contains(text(),'Later')]    ${waitTime}
+    Comment    Click Element    //button[contains(text(),'Later')]
+    Comment    Wait Until Element Is Visible    //span[contains(text(),'Management')]    60s
+    Wait Until Element Is Visible    //button[contains(text(),'Now')]    ${waitDelay}
+    Click Element    //button[contains(text(),'Now')]
+    ${ClassName}    generation_of_unique_Char    Class
+    Wait Until Element Is Visible    //input[@title='Class Name']    ${waitDelay}
+    Input Text    //input[@title='Class Name']    ${ClassName}
+    ${getTitle}    Get Matching Xpath Count    //select[@id='teacherSignUpDlg-classTitles']//option
+    : FOR    ${ListIteams}    IN RANGE    1    ${getTitle}
+    \    Click On Element    //select[@id='teacherSignUpDlg-classTitles']//option['${ListIteams}']
+    \    Comment    Select From List By Label    //select[@id='teacherSignUpDlg-classTitles']    CCS Motivation Math Level 01
+    Wait Until Element Is Visible    //button[@id='teacherSignUpDlg-next']    ${waitTime}
+    Click Element    //button[@id='teacherSignUpDlg-next']
+    Wait Until Element Is Visible    //button[@id='mysPromptBtnYes']    ${waitDelay}
+    Click Element    //button[@id='mysPromptBtnYes']
+    Wait Until Element Is Visible    //div[@class='newClassTitles']//following::div//button[contains(text(),'No')]    ${waitDelay}
+    Click Element    //div[@class='newClassTitles']//following::div//button[contains(text(),'No')]
+    Wait Until Element Is Visible    //button[contains(text(),'Finished')]    ${waitDelay}
+    Click Element    //button[contains(text(),'Finished')]
+    Wait Until Page Contains Element    //button[@id='managementBtn']//span    ${waitDelay}
+    ${BuOK}    Verify Element Visible    //button[contains(text(),'Ok')]
+    Run Keyword If    "${BuOK}"=="True"    Click Element    //button[contains(text(),'Ok')]
+    ${TeacherReg}    Run Keyword And Return Status    Wait Until Element Is Visible    //span[contains(text(),'Management')]    30s
+    Comment    Close All Browsers
+    [Return]    ${TeacherReg}

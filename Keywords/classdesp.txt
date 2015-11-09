@@ -1,0 +1,22 @@
+*** Settings ***
+Resource          ../Library/Super.txt
+Resource          Timestamp.txt
+
+*** Keywords ***
+classDesp
+    [Arguments]    ${Ts}    ${ClassDescription}
+    Wait Until Page Contains Element    //button[@id='managementBtn']    ${waitDelay}
+    Focus    //button[@id='managementBtn']
+    Mouse Over    //button[@id='managementBtn']
+    Wait Until Keyword Succeeds    2m    2s    Click Element    //button[@id='managementBtn']
+    Wait Until Page Contains Element    //iframe[@id='iframeSchoolAdmin']
+    Select Frame    //iframe[@id='iframeSchoolAdmin']
+    Wait Until Page Contains Element    //th[contains(text(),'Teacher')]    ${waitDelay}
+    Focus    //div[@id='newGroupBtn']
+    Mouse Over    //div[@id='newGroupBtn']
+    Wait Until Keyword Succeeds    2m    2s    Click Element    //div[@id='newGroupBtn']
+    ${TimpeStamp}    Generation Of Unique Id    ${Ts}
+    Input Text    //input[@id='newGroupName']    ${TimpeStamp}
+    Input Text    //textarea[@id='newGroupDescription']    ${ClassDescription}
+    ${classDep}    Run Keyword And Return Status    Wait Until Element Is Visible    //textarea[@id='newGroupDescription']
+    [Return]    ${TimpeStamp}    ${classDep}

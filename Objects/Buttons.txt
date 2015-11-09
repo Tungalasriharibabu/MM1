@@ -1,0 +1,10 @@
+*** Settings ***
+Documentation     Repositary of collection of all buttons avalible in Mentoringminds.
+
+*** Variables ***
+${button.Motivational Online .Next}    //button[@id='adminSignUpDlg-next']    # Click on Next Button to navigate to next page.
+${button.Motivational Online.Terms And Conditions}    //button[contains(@id,'adminSignUpDlg-show-terms')]    # Click on terms and conditions button to create account.
+${button.Motivational Online.I Agree}    //button[contains(text(),'I Agree')]    # Click on I Agree Button to naviagte to next page.
+${button.Motivational Online.Create Account}    //button[contains(text(),'Create Account')]    # Click on create button to acess new account.
+${button.Motivational Online.SchoolSignUpNext}    //button[@id='studentSignUpDlg-next']    # Click on Next button to navigate to next page.
+${textBox.Motivational Online.studentSignIn}    //button[@id='studentSignUpDlg-next']    # Click on signin button to login into application.

@@ -1,0 +1,112 @@
+*** Settings ***
+Resource          ../Library/Super.txt
+Resource          Timestamp.txt
+Resource          classdesp.txt
+Resource          Login.txt
+
+*** Keywords ***
+LoginMaster
+    [Arguments]    ${TeacherLogin}    ${Teacherpassword}
+    LoginPage    ${url.MMproject}    ${Browser}
+    Wait Until Element Is Visible    //input[@id='loginUserID']    ${waitDelay}
+    Input Text    //input[@id='loginUserID']    ${TeacherLogin}
+    Wait Until Element Is Visible    //input[@id='userPasswd']    ${waitDelay}
+    Input Text    //input[@id='userPasswd']    ${Teacherpassword}
+    Wait Until Element Is Visible    //button[@id='sign-in']    ${waitDelay}
+    Click Button    //button[@id='sign-in']
+    ${Loginstatus}    Run Keyword And Return Status    Wait Until Element Is Visible    //button[@id='sign-in']    30s
+    [Return]    ${Loginstatus}
+
+CreateClass
+    [Arguments]    ${Ts}    ${ClassDescription}
+    classDesp    ${Ts}    ${ClassDescription}
+    Click Element    //span[contains(text(),'OK')]
+    ${Createclass}    Run Keyword And Return Status    Wait Until Element Is Visible    //th[contains(text(),'Teacher')]    30s
+    [Teardown]
+    [Return]    ${Createclass}
+
+EditStudents and Tittle
+    [Arguments]    ${list}    ${Ts}    ${ClassDescription}    ${TeacherLogin}    ${Teacherpassword}    ${list2}
+    LoginMaster    ${TeacherLogin}    ${Teacherpassword}
+    classDesp    ${Ts}    ${ClassDescription}
+    Wait Until Element Is Visible    //div[@id='editNewGroupUsersBtn']    30s
+    Click Element    //div[@id='editNewGroupUsersBtn']
+    : FOR    ${fromTableUserID}    IN    @{list}
+    \    Wait Until Page Contains Element    //div[@data-dojo-attach-point="fromNode"]//div[@class='dgrid-scroller']//div[@role='row']//td[contains(text(),'${fromTableUserID}')]    60s
+    \    Click Element    //div[@data-dojo-attach-point="fromNode"]//div[@class='dgrid-scroller']//div[@role='row']//td[text()='${fromTableUserID}']
+    \    Wait Until Element Is Visible    //div[@data-dojo-attach-point="fromNode"]//div[@class='dgrid-scroller']//div[@role='row']//td[text()='${fromTableUserID}']
+    \    ${toTableUserID}    Get Text    //div[@data-dojo-attach-point="toNode"]//div[@class='dgrid-scroller']//div[@role='row']//td[text()='${fromTableUserID}']
+    \    Should Be Equal    ${fromTableUserID}    ${toTableUserID}
+    Wait Until Keyword Succeeds    3m    5s    Click Element    //span[@id='listEditorDlg_title']/following::div/div[@id='dijit_layout_ContentPane_14']/div//span[@id='saveListEditor_label']
+    Wait Until Page Contains Element    //div[@id='editNewGroupSyllabusBtn']    50s
+    Focus    //div[@id='editNewGroupSyllabusBtn']
+    Mouse Over    //div[@id='editNewGroupSyllabusBtn']
+    Wait Until Element Is Visible    //div[@id='editNewGroupSyllabusBtn']    20s
+    Wait Until Keyword Succeeds    3m    2s    Click Element    //div[@id='editNewGroupSyllabusBtn']
+    : FOR    ${fromTableUserID}    IN    @{list2}
+    \    Wait Until Page Contains Element    //div[@data-dojo-attach-point="fromNode"]//div[@class='dgrid-scroller']//div[@role='row']//td[text()='${fromTableUserID}']    60s
+    \    Click Element    //div[@data-dojo-attach-point="fromNode"]//div[@class='dgrid-scroller']//div[@role='row']//td[text()='${fromTableUserID}']
+    \    Wait Until Element Is Visible    //div[@data-dojo-attach-point="toNode"]//div[@class='dgrid-scroller']//div[@role='row']//td[text()='${fromTableUserID}']
+    \    ${toTableUserID}    Get Text    //div[@data-dojo-attach-point="toNode"]//div[@class='dgrid-scroller']//div[@role='row']//td[text()='${fromTableUserID}']
+    \    Should Be Equal    ${fromTableUserID}    ${toTableUserID}
+    Wait Until Page Contains Element    //span[contains(text(),'Edit Syllabus of Class - ')]/following::div/div[@id='dijit_layout_ContentPane_14']/div//span[@id='saveListEditor']    20s
+    Click Element    //span[contains(text(),'Edit Syllabus of Class - ')]/following::div/div[@id='dijit_layout_ContentPane_14']/div//span[@id='saveListEditor']
+    Wait Until Page Contains Element    //div[@id='globalYesNoPopup']//button[@id='mysPromptBtnYes']    20s
+    Click Element    //div[@id='globalYesNoPopup']//button[@id='mysPromptBtnYes']
+    Wait Until Page Contains Element    //span[@id='newGroupOK_label']    20s
+    Focus    //span[@id='newGroupOK_label']
+    Mouse Over    //span[@id='newGroupOK_label']
+    Wait Until Element Is Visible    //span[@id='newGroupOK_label']    20s
+    Wait Until Keyword Succeeds    3m    2s    Click Element    //span[@id='newGroupOK_label']
+    ${EditStatus}    Run Keyword And Return Status    Wait Until Element Is Visible    //span[@id='newGroupOK_label']
+    Close Browser
+    [Return]    ${EditStatus}
+
+AddStudent
+    [Arguments]    ${Grade}    ${userid}
+    LoginPage    ${url.MMproject}    gc
+    Wait Until Element Is Visible    //input[@id='loginUserID']
+    Input Text    //input[@id='loginUserID']    ${userid}
+    Wait Until Element Is Visible    //input[@id='userPasswd']
+    Input Text    //input[@id='userPasswd']    test@123
+    Wait Until Element Is Visible    //button[@id='sign-in']
+    Click Button    //button[@id='sign-in']
+    Wait Until Page Contains Element    //button[@id='managementBtn']    50s
+    Focus    //button[@id='managementBtn']
+    Mouse Over    //button[@id='managementBtn']
+    Wait Until Keyword Succeeds    2m    2s    Click Element    //button[@id='managementBtn']
+    Wait Until Page Contains Element    //iframe[@id='iframeSchoolAdmin']
+    Select Frame    //iframe[@id='iframeSchoolAdmin']
+    Wait Until Page Contains Element    //th[contains(text(),'Teacher')]    60s
+    Focus    //div[@id='newUserBtn']
+    Mouse Over    //div[@id='newUserBtn']
+    Wait Until Keyword Succeeds    2m    2s    Click Element    //div[@id='newUserBtn']
+    Wait Until Element Is Visible    //input[@id='newUserFirstName']
+    ${b}    Generate Random String    2    [LOWER]
+    ${c}    Catenate    StudentFristname    ${b}
+    Input Text    //input[@id='newUserFirstName']    ${c}
+    Input Text    //input[@id='newUserLastName']    StudentLastName
+    Wait Until Page Contains Element    //table[@id='newUserGrade']//tbody//td[2]    50s
+    Focus    //table[@id='newUserGrade']//tbody//td[2]
+    Mouse Over    //table[@id='newUserGrade']//tbody//td[2]
+    Click Element    //table[@id='newUserGrade']//tbody//td[2]
+    Wait Until Element Is Visible    //tbody[@class='dijitReset']//td[contains(text(),'${Grade}')]
+    Click Element    //tbody[@class='dijitReset']//td[contains(text(),'${Grade}')]
+    ${a}    Generate Random String    12    [LOWER]
+    Input Text    //div[@widgetid='newUserUserId']//div[2]//input[1]    ${a}
+    Input Text    //div[@widgetid='newUserPassword']//div[2]//input[1]    test@123
+    Click Element    //span[@id='newUserOK_label']
+    ${AddStudent}    Run Keyword And Return Status    Wait Until Element Is Visible    //span[@id='newUserOK_label']
+    Close Browser
+    [Return]    ${AddStudent}
+
+Getlist
+    [Arguments]    ${Columnanme}    ${row}    ${tablelocator}
+    Wait Until Element Is Visible    //div[@id='editNewGroupUsersBtn']    30s
+    Comment    Click Element    //div[@id='editNewGroupUsersBtn']
+    Wait Until Element Is Enabled    //div[@data-dojo-attach-point="fromNode"]//div//table[@id='dgrid_0-header']    60s
+    table_get_column_no    //div[@data-dojo-attach-point="fromNode"]    ${Columnanme}
+    ${tablecolval}    get_columnvalues    ${tablelocator}    ${Columnanme}    ${row}
+    ${getlist}    Run Keyword And Return Status    Wait Until Element Is Visible    //span[@id='listEditorDlg_title']/following::div/div[@id='dijit_layout_ContentPane_14']/div//span[@id='saveListEditor_label']
+    log    ${getlist}
+    [Return]    ${tablecolval}    ${getlist}

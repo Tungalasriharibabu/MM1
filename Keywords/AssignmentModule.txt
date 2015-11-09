@@ -1,0 +1,179 @@
+*** Settings ***
+Resource          ../Library/Super.txt
+Library           ../Library/TableData.py
+
+*** Keywords ***
+waituntilelementclick
+    [Arguments]    ${clicklocators}
+    Focus    ${clicklocators}
+    Mouse Over    ${clicklocators}
+    Wait Until Keyword Succeeds    5m    35s    Click Element    ${clicklocators}
+    ${click}    Run Keyword And Return Status    Wait Until Element Is Visible    ${clicklocators}
+    [Return]    ${click}
+
+Assignmentradiobuttonselection
+    Wait Until Element Is Enabled    //td[contains(text(),'02 Form B')]//preceding-sibling::td
+    Click On Element    //td[contains(text(),'01 Form A')]//preceding-sibling::td
+    Click On Element    //td[contains(text(),'02 Form B')]//preceding-sibling::td
+    Click On Element    //label//input[@id='handoutAssmtsBook']
+    Comment    Click On Element    //button[@id='handoutAssmtsBtn']//span[contains(text(),'Assign Now')]
+
+AddAssignment
+    [Arguments]    ${class}    ${sampl1}    ${L}    ${Assignmentname}    ${Assignmentlist}    ${selectcls}
+    Wait Until Element Is Visible    //div[@id='assmtsBtnContainer']//button    ${waitDelay}
+    ${click}    waituntilelementclick    //div[@id='assmtsBtnContainer']//button
+    Run Keyword Unless    ${click}    Fail    Assignment button is not clicked
+    Wait Until Page Contains Element    //div[@id='assignmentsOptionsView']//button[@id='newAssignmentsBtn']    ${waitDelay}    New Assigment button is not contain on that page
+    Wait Until Keyword Succeeds    2m    2s    Click On Element    //div[@id='assignmentsOptionsView']//button[@id='newAssignmentsBtn']
+    Wait Until Element Is Visible    //div[contains(text(),'Classes')]    ${waitDelay}    Class Name check box is not available
+    ${classbutton}    Verify Element Visible    //ul/preceding-sibling::div[contains(text(),'${selectcls}')]
+    Run Keyword If    "${classbutton}"=="True"    ClickClassbutton1    ${selectcls}
+    Wait Until Page Contains Element    //div[text()='${class}']//following-sibling::input    ${waitDelay}    Class Name check box is not available
+    Wait Until Keyword Succeeds    2m    2s    Click On Element    //div[text()='${class}']//following-sibling::input
+    Wait Until Element Is Enabled    //li[contains(@style,'${sampl1}')]    ${waitDelay}    Select Subject are not available
+    sleep    1s
+    Wait Until Keyword Succeeds    2m    2s    Click On Element    //li[contains(@style,'${sampl1}')]
+    Wait Until Element Is Enabled    //li[contains(@style,'${sampl1}') and @class='roundabout-moveable-item roundabout-in-focus']    ${waitDelay}    Subject is not Selected
+    Wait Until Element Is Visible    //li[contains(@style,'Level_${L}.png')]    ${waitDelay}    Labels are not available
+    sleep    1s
+    Wait Until Keyword Succeeds    2m    2s    Click On Element    //li[contains(@style,'Level_${L}.png')]
+    Wait Until Element Is Enabled    //li[contains(@style,'Level_${L}.png') and @class='roundabout-moveable-item roundabout-in-focus']    ${waitDelay}    Level is not selected
+    sleep    20s
+    ${buttonstus}    Verify Element Visible    //td[contains(text(),'02 Form B')]//preceding-sibling::td
+    ${buttonstus1}    Verify Element Visible    //table[@id='activitySetSelect']//td
+    Run Keyword If    "${buttonstus}"=="True"    Assignmentradiobuttonselection
+    Run Keyword If    "${buttonstus1}"=="True"    AssignmentListbox    ${Assignmentname}    ${Assignmentlist}
+    ${AddAss}    Run Keyword And Return Status    Wait Until Element Is Visible    //li[contains(@style,'Level_${L}.png')]
+    Close Browser
+    [Return]    ${AddAss}
+
+AssignmentListbox
+    [Arguments]    ${Assignmentname}    ${Assignmentlist}
+    Wait Until Element Is Enabled    //table[@id='activitySetSelect']    70s    Assignment selection list is not available
+    Click Element    //table[@id='activitySetSelect']
+    Wait Until Page Contains Element    //td[contains(text(),'Make a Selection')]    ${waitDelay}    List of assignment is not avliable
+    Wait Until Element Is Visible    //table//tbody//tr//td[contains(text(),'${Assignmentname}')]    ${waitDelay}    List of assignment is not avliable
+    Click on Element    //table//tbody//tr//td[contains(text(),'${Assignmentname}')]
+    : FOR    ${selectlesson}    IN    @{Assignmentlist}
+    \    Wait Until Element Is Visible    //span[contains(text(),'${selectlesson}')]//parent::td//preceding-sibling::td//input    ${waitDelay}    Lessons in assignments are not available
+    \    Click on Element    //span[contains(text(),'${selectlesson}')]//parent::td//preceding-sibling::td//input
+    ${ComB}    Verify Element Visible    //div[@class='disablePrintOnly']
+    Run Keyword If    "${ComB}"=="True"    BookAssignment
+    Comment    Click on Element    //button[@id='handoutAssmtsBtn']//span[contains(text(),'Assign Now')]
+
+ClickClassbutton1
+    [Arguments]    ${selectcls}
+    Wait Until Page Contains Element    //ul/preceding-sibling::div[contains(text(),'${selectcls}')]    ${waitDelay}    Group or Class \ button is not contain on that page
+    Wait Until Element Is Visible    //ul/preceding-sibling::div[contains(text(),'${selectcls}')]    ${waitDelay}    Group or Class \ button is not avliable
+    Click On Element    //ul/preceding-sibling::div[contains(text(),'${selectcls}')]
+
+Writeassignment
+    Wait Until Element Is Enabled    //div[contains(text(),'Start')]    ${waitDelay}
+    Click On Element    //div[@id='dijit_ProgressBar_1_label']/ancestor::tr//div[contains(text(),'Start')]
+    Wait Until Element Is Visible    //div[@id='mcStemHTML']    180s
+    Wait Until Element Is Visible    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']    ${waitDelay}
+    ${count}    Get Matching Xpath Count    //div[@id='assmtGrid']//following-sibling::div//div//table
+    : FOR    ${ran}    IN RANGE    1    ${count}
+    \    ${IamStus}    Verify Element Visible    //div[@id='assmtGrid-row-${ran}']//td[3]//img
+    \    Run Keyword If    "${IamStus}"=="True"    Click On Element    //li[@id='navBtnNext']
+    \    Wait Until Element Is Visible    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']    ${waitDelay}
+    \    Click On Element    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']
+    \    ${Savewait}    Wait Until Element Is Visible    //div[@aria-disabled='false']    ${waitDelay}
+    \    Run Keyword If    "${Savewait}"=="false"    Click On Element    //li[@id='navBtnNext']
+    \    Click On Element    //div[contains(text(),'Save Answer')]
+    \    sleep    1s
+    \    Wait Until Element Is Visible    //div[@id='mcStemHTML']    ${waitDelay}
+    \    Wait Until Element Is Visible    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']    ${waitDelay}
+    Click On Element    //li[@id='navBtnTurnIn']
+    Comment    Click On Element    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']
+    Comment    Wait Until Element Is Visible    //div[@aria-disabled='false']
+    Comment    Click On Element    //div[contains(text(),'Save Answer')]
+    Comment    Click On Element    //li[@id='navBtnFlag']
+    Comment    Click On Element    //li[@id='navBtnNext']
+    Comment    Click On Element    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']
+    Comment    Wait Until Element Is Visible    //div[@aria-disabled='false']
+    Comment    Click On Element    //div[contains(text(),'Save Answer')]
+    Comment    Click On Element    //li[@id='navBtnPrevious']
+
+assgsample
+    [Arguments]    ${DataPass}
+    Wait Until Element Is Enabled    //div[contains(text(),'Start')]    ${waitDelay}
+    Click On Element    //div[@id='dijit_ProgressBar_0_label']/ancestor::tr//div[contains(text(),'Start')]
+    waituntilQuestion    //div[@id='assmtGrid-row-1']    40s    180s
+    ${count}    Get Matching Xpath Count    //div[@id='assmtGrid']//following-sibling::div//div//table
+    : FOR    ${ran}    IN RANGE    1    ${count}
+    \    ${IamStus}    Verify Element Visible    //div[@id='assmtGrid-row-${ran}']//td[3]//img
+    \    Run Keyword If    "${IamStus}"=="True"    Click On Element    //li[@id='navBtnNext']
+    \    ${optionAvailble}    Verify Element Visible    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']
+    \    ${blank}    Verify Element Visible    //div[contains(@id,'blank') and @class='frBlank']
+    \    Run Keyword If    "${optionAvailble}"=="True"    SaveAnswer    ${waitDelay}
+    \    Run Keyword If    "${Blank}"=="True"    Fill in blanks    ${DataPass}
+    \    sleep    1s
+    \    Click On Element    //li[@id='navBtnNext']
+    \    sleep    1s
+    \    waituntilQuestion    //div[@id='assmtGrid-row-1']    40s    40s
+    Click On Element    //li[@id='navBtnTurnIn']
+
+waituntilQuestion
+    [Arguments]    ${locator}    ${loop_delay}    ${waitDelay}
+    : FOR    ${itr}    IN RANGE    0    100
+    \    ${element_on_Page}    Run Keyword And Return Status    Wait Until Page Contains Element    ${locator}    ${waitDelay}
+    \    Continue For Loop If    '${element_on_Page}'!='True'
+    \    ${element_visibility}    Run Keyword And Return Status    Wait Until Element Is Visible    ${locator}    ${loop_delay}
+    \    Return From Keyword If    ${element_visibility}    True    ELSE    Continue For Loop
+
+SaveAnswer
+    [Arguments]    ${waitDelay}
+    Wait Until Element Is Visible    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']    ${waitDelay}
+    Click On Element    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']
+    ${Savewait}    Wait Until Element Is Visible    //div[@aria-disabled='false']    ${waitDelay}
+    Run Keyword If    "${Savewait}"=="false"    Click On Element    ${Nextbutton}
+    Click On Element    //div[contains(text(),'Save Answer')]
+
+Fill in blanks
+    [Arguments]    ${DataPass}
+    Wait Until Element Is Visible    //div[contains(@id,'blank') and @class='frBlank']
+    ${countFill}    Get Matching Xpath Count    //div[contains(@id,'blank') and @class='frBlank']
+    : FOR    ${ranm}    IN RANGE    1    ${countFill}
+    \    Wait Until Element Is Visible    //div[contains(@id,'blank00${ranm}') and @class='frBlank']    ${waitDelay}
+    \    Focus    //div[contains(@id,'blank00${ranm}') and @class='frBlank']
+    \    Mouse Over    //div[contains(@id,'blank00${ranm}') and @class='frBlank']
+    \    Click On Element    //div[contains(@id,'blank00${ranm}') and @class='frBlank']
+    \    ${staustex}    Verify Element Visible    //input[contains(@id,'TextBox')]
+    \    ${stausTextarea}    Verify Element Visible    //textarea[contains(@id,'Textarea')]
+    \    Run Keyword If    "${staustex}"=="True"    InputText    //input[contains(@id,'TextBox')]    12
+    \    Run Keyword If    "${stausTextarea}"=="True"    InputText    //textarea[contains(@id,'Textarea')]    ${DataPass}
+    \    Comment    InputText    //div[contains(@id,'blank00${ranm}') and @class='frBlank']//preceding::span//textarea    ${DataPass}
+    ${Savewait}    Wait Until Element Is Visible    //div[@aria-disabled='false']    ${waitDelay}
+    Run Keyword If    "${Savewait}"=="false"    Click On Element    //li[@id='navBtnNext']
+    Click On Element    //div[contains(text(),'Save Answer')]
+
+WaitUntillElementPresent
+    [Arguments]    ${locator}
+    : FOR    ${itr}    IN RANGE    0    100
+    \    ${element_on_Page}    Run Keyword And Return Status    Wait Until Page Contains Element    ${locator}    ${waitDelay}
+    \    Continue For Loop If    '${element_on_Page}'!='True'
+
+BookAssignment
+    Wait For Element Visible    //input[@id='handoutAssmtsBook']
+    Click On Element    //input[@id='handoutAssmtsBook']
+    Click On Element    //span[contains(text(),'Introduction ')]//parent::td//preceding-sibling::td//input
+
+Write Ass1
+    [Arguments]    ${AssignmentType}    ${AssignmentName}
+    Wait Until Element Is Enabled    //div[contains(text(),'Start')]    ${waitDelay}
+    Click On Element    //span[contains(text(),'${AssignmentType}')]//following-sibling::span[contains(text(),'${AssignmentName}')]/ancestor::tr//div[contains(text(),'Start')]
+    Wait Until Element Is Visible    //div[@id='mcStemHTML']    180s
+    Wait Until Element Is Visible    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']    ${waitDelay}
+    ${count}    Get Matching Xpath Count    //div[@id='assmtGrid']//following-sibling::div//div//table
+    : FOR    ${ran}    IN RANGE    1    ${count}
+    \    ${IamStus}    Verify Element Visible    //div[@id='assmtGrid-row-${ran}']//td[3]//img
+    \    Run Keyword If    "${IamStus}"=="True"    Click On Element    //li[@id='navBtnNext']
+    \    Wait Until Element Is Visible    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']    ${waitDelay}
+    \    Click On Element    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']
+    \    ${Savewait}    Wait Until Element Is Visible    //div[@aria-disabled='false']    ${waitDelay}
+    \    Run Keyword If    "${Savewait}"=="false"    Click On Element    //li[@id='navBtnNext']
+    \    Click On Element    //div[contains(text(),'Save Answer')]
+    \    sleep    1s
+    \    Wait Until Element Is Visible    //div[@id='mcStemHTML']    ${waitDelay}
+    \    Wait Until Element Is Visible    //div[@id='mcChoices']//tr//td//div[@id='answerChoice1']    ${waitDelay}

@@ -1,0 +1,27 @@
+*** Settings ***
+Resource          ../Objects/Buttons.txt
+Resource          ../Objects/CheckBox.txt
+Resource          ../Objects/CommonProperties.txt
+Resource          ../Objects/Dropdownlist.txt
+Resource          ../Objects/Labels.txt
+Resource          ../Objects/Links.txt
+Resource          ../Objects/RadioButtons.txt
+Resource          ../Objects/TextBox.txt
+Library           Selenium2Library
+Library           Collections
+Library           String
+Library           OperatingSystem
+Library           Screenshot
+Library           TableData.py
+Resource          ../Keywords/closeapplication.txt
+Resource          ../Keywords/AssignmentModule.txt
+Resource          ../Keywords/Login.txt
+Resource          ../Keywords/UserRegistration.txt
+Library           ../Library/as.py
+Resource          ../Keywords/Registrationcode.txt
+Resource          ../Keywords/Teachermodule.txt
+Library           AutoItLibrary
+Resource          ../Keywords/closeapplication.txt
+Library           ../Library/TableData.py
+Resource          ../Keywords/TeacherRegistration.txt
+

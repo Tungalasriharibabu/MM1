@@ -1,0 +1,6 @@
+*** Variables ***
+${label.loginPage.menuItem3}    //td[contains(@id,'dijit_MenuItem_3_text')]    # Click on Newuser link in homepage,districtadminLabel is available
+${label.Motivational Online.jobTitle}    //td[contains(text(),'Assistant Principal')]    # Click on this label to select job title
+${label.loginPage.menuItem2}    //td[contains(@id,'dijit_MenuItem_2_text')]    # Select school admin option
+${label.loginPage.menuItem1}    //td[@id='dijit_MenuItem_0_text']    # Click on Newuser link in homepage,Student label is available
+${label.Motivational Online.studentGrade}    //td[contains(@id,'dijit_MenuItem_6_text')]    # Select grade from grade level

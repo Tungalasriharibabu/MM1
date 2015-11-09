@@ -1,0 +1,19 @@
+*** Settings ***
+Resource          ../Library/Super.txt
+
+*** Keywords ***
+LoginPage
+    [Arguments]    ${Url}    ${BrowserName}
+    Open Browser    ${Url}    ${BrowserName}
+    Maximize Browser Window
+    Wait Until Element Is Visible    ${link.loginPage.newUser}    ${waitDelay}    New user link \ is not visible with in 20 sec
+    ${Loginstatus}    Run Keyword And Return Status    Wait Until Element Is Visible    ${link.loginPage.newUser}    30s
+    [Return]    ${Loginstatus}
+
+MangementButton
+    Wait Until Page Contains Element    //button[@id='managementBtn']    50s
+    Focus    //button[@id='managementBtn']
+    Mouse Over    //button[@id='managementBtn']
+    Wait Until Keyword Succeeds    2m    2s    Click Element    //button[@id='managementBtn']
+    ${Management}    Run Keyword And Return Status    Wait Until Element Is Visible
+    [Return]    ${Management}

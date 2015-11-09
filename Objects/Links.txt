@@ -1,0 +1,2 @@
+*** Variables ***
+${link.loginPage.newUser}    //span[@id='new-user-btn_label']    # Click on the link to create the new user.
